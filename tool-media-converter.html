@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Mídia - DevTools Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <!-- Navegação -->
+    <nav class="bg-black/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="index.html" class="text-2xl font-bold gradient-text">DevTools Hub</a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="index.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">Início</a>
+                            <a href="tools.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">Ferramentas</a>
+                            <a href="github.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">GitHub</a>
+                            <a href="about.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-300 hover:text-white">Sobre</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Menu mobile omitido para brevidade -->
+    </nav>
+
+    <!-- Detalhes da Ferramenta -->
+    <div class="py-16 bg-black/50 min-h-screen">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gray-900 rounded-lg shadow-lg border border-gray-800 p-8">
+                <div class="flex items-center mb-6">
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <i class="fas fa-exchange-alt text-pink-500 text-3xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-3xl font-bold text-white">Conversor de Mídia</h1>
+                        <p class="text-gray-300 mt-1">v1.0.0</p>
+                    </div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80" alt="Conversor de Mídia" class="w-full h-48 object-cover rounded-lg mb-6">
+                <h2 class="text-xl font-semibold text-white mb-2">Descrição</h2>
+                <p class="text-gray-300 mb-6">
+                    O Conversor de Mídia é uma ferramenta simples e eficiente para converter arquivos de áudio e vídeo entre diversos formatos populares. Ideal para desenvolvedores, criadores de conteúdo e qualquer pessoa que precise adaptar arquivos de mídia para diferentes plataformas.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-lg font-medium text-white mb-2">Funcionalidades</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Conversão entre formatos de áudio (MP3, WAV, OGG, FLAC, etc.)</li>
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Conversão entre formatos de vídeo (MP4, AVI, MKV, MOV, etc.)</li>
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Extração de áudio de vídeos</li>
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Conversão em lote de múltiplos arquivos</li>
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Interface de linha de comando simples</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-white mb-2">Requisitos</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Python 3.8+</li>
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> FFmpeg instalado</li>
+                            <li><i class="fas fa-check text-pink-500 mr-2"></i> Sistemas suportados: Windows, Linux, macOS</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-2">Instalação</h3>
+                <div class="bg-gray-800 rounded-lg p-4 mb-6">
+                    <code class="text-gray-300 font-mono text-sm">
+                        <span class="text-pink-400"># Clone o repositório</span><br>
+                        git clone https://github.com/seu-usuario/conversor-de-midia.git<br><br>
+                        <span class="text-pink-400"># Instale as dependências</span><br>
+                        cd conversor-de-midia<br>
+                        pip install -r requirements.txt<br><br>
+                        <span class="text-pink-400"># Execute o conversor</span><br>
+                        python converter.py --input arquivo.mp4 --output arquivo.mp3
+                    </code>
+                </div>
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <a href="https://github.com/seu-usuario/conversor-de-midia/archive/refs/heads/main.zip" class="download-btn inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600">
+                        <i class="fas fa-download mr-2"></i> Baixar (.zip)
+                    </a>
+                    <a href="https://github.com/seu-usuario/conversor-de-midia" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-md shadow-sm text-white bg-gray-800 hover:bg-gray-700">
+                        <i class="fab fa-github mr-2"></i> Ver no GitHub
+                    </a>
+                    <a href="https://github.com/seu-usuario/conversor-de-midia#readme" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-md shadow-sm text-white bg-gray-800 hover:bg-gray-700">
+                        <i class="fas fa-book mr-2"></i> Documentação
+                    </a>
+                </div>
+                <a href="tools.html" class="text-pink-400 hover:text-pink-300 text-sm font-medium">
+                    <i class="fas fa-arrow-left mr-1"></i> Voltar para Ferramentas
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="bg-black/80 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-white">DevTools Hub</h3>
+                    <p class="mt-4 text-sm text-gray-300">
+                        Um portfólio das minhas ferramentas open-source hospedadas no GitHub. Todas as ferramentas são gratuitas para uso e modificação.
+                    </p>
+                    <div class="mt-4 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-pink-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-pink-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-pink-400">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white">Links Rápidos</h3>
+                    <div class="mt-4 space-y-2">
+                        <a href="index.html" class="block text-sm text-gray-300 hover:text-pink-400">Início</a>
+                        <a href="tools.html" class="block text-sm text-gray-300 hover:text-pink-400">Todas as Ferramentas</a>
+                        <a href="github.html" class="block text-sm text-gray-300 hover:text-pink-400">Perfil no GitHub</a>
+                        <a href="about.html" class="block text-sm text-gray-300 hover:text-pink-400">Contribuir</a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white">Suporte</h3>
+                    <div class="mt-4 space-y-2">
+                        <a href="#" class="block text-sm text-gray-300 hover:text-pink-400">Documentação</a>
+                        <a href="#" class="block text-sm text-gray-300 hover:text-pink-400">Reportar Problemas</a>
+                        <a href="#" class="block text-sm text-gray-300 hover:text-pink-400">Solicitar Funcionalidade</a>
+                        <a href="#" class="block text-sm text-gray-300 hover:text-pink-400">Contato</a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-400">
+                    &copy; 2023 DevTools Hub. Todos os direitos reservados.
+                </p>
+                <div class="mt-4 md:mt-0 flex space-x-6">
+                    <a href="#" class="text-sm text-gray-400 hover:text-pink-400">Política de Privacidade</a>
+                    <a href="#" class="text-sm text-gray-400 hover:text-pink-400">Termos de Serviço</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/main.js"></script>
+</body>
+</html>

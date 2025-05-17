@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Downloader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center">
+    <div class="bg-gray-900 rounded-lg shadow-lg border border-gray-800 p-8 max-w-md w-full">
+        <h1 class="text-2xl font-bold text-white mb-4">YouTube Downloader</h1>
+        <label class="block text-gray-300 mb-2">Link do vídeo ou playlist</label>
+        <input type="text" id="youtube-url" class="w-full p-2 rounded bg-gray-800 text-white mb-4" placeholder="https://youtube.com/..." required>
+        <label class="block text-gray-300 mb-2">Formato</label>
+        <select id="formato" class="w-full p-2 rounded bg-gray-800 text-white mb-4">
+            <option value="mp4">Vídeo (.mp4)</option>
+            <option value="mp3">Música (.mp3)</option>
+        </select>
+        <button id="baixar-btn" class="w-full py-2 rounded bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold hover:from-pink-600 hover:to-rose-600 transition">Baixar</button>
+        <p id="status" class="text-gray-300 mt-4"></p>
+    </div>
+    <script>
+    // Ping para acordar o backend do Replit
+    fetch('https://SEU-REPLIT-URL.repl.co/', { method: 'GET' }).catch(()=>{});
+
+    document.getElementById('baixar-btn').onclick = async function() {
+        const url = document.getElementById('youtube-url').value.trim();
+        const formato = document.getElementById('formato').value;
+        const status = document.getElementById('status');
+        if (!url) {
+            status.textContent = 'Informe o link do vídeo!';
+            return;
+        }
+        this.disabled = true;
+        status.textContent = 'Processando, aguarde...';
+        try {
+            const res = await fetch('https://replit.com/@BRUNOMOURA13/youtube-downloader', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url, formato })
+            });
+            if (!res.ok) {
+                const erro = await res.json();
+                throw new Error(erro.erro || 'Erro ao baixar');
+            }
+            const blob = await res.blob();
+            const ext = formato === 'mp3' ? 'mp3' : 'mp4';
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `youtube-download.${ext}`;
+            a.click();
+            status.textContent = 'Download iniciado!';
+        } catch (e) {
+            status.textContent = 'Erro: ' + e.message;
+        }
+        this.disabled = false;
+    };
+    </script>
+</body>
+</html>
