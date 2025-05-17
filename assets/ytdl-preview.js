@@ -1,5 +1,5 @@
 // URL do backend
-const BACKEND_URL = "https://SEU-REPLIT-URL.repl.co"; // Troque pelo seu backend real
+const BACKEND_URL = "https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/info"; // Troque pelo seu backend real
 
 const urlInput = document.getElementById('youtube-url');
 const previewDiv = document.getElementById('preview');
