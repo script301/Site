@@ -30,54 +30,49 @@
         <p id="status" class="text-gray-300 mt-4"></p>
     </div>
     <script>
+    // ENDEREÇO CORRETO DO SEU BACKEND:
+    const BACKEND = 'https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev';
+
     // Ping para acordar o backend do Replit
-    fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/', { method: 'GET' }).catch(()=>{});
+    fetch(BACKEND + '/', { method: 'GET' }).catch(()=>{});
 
     // Função para obter informações do vídeo e mostrar preview
     document.getElementById('youtube-url').addEventListener('blur', async function() {
         const url = this.value.trim();
         const preview = document.getElementById('preview');
-        
+        const thumb = document.getElementById('preview-thumb');
+        const title = document.getElementById('preview-title');
+        const uploader = document.getElementById('preview-uploader');
+        const duration = document.getElementById('preview-duration');
         if (!url) {
             preview.classList.add('hidden');
             return;
         }
-        
         try {
-            // Aqui você faria uma chamada para o backend para obter os metadados do vídeo
-            const res = await fetch('hhttps://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/info', {
+            const res = await fetch(BACKEND + '/info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url })
             });
-            
-            if (!res.ok) {
-                throw new Error('Não foi possível obter informações do vídeo');
-            }
-            
+            if (!res.ok) throw new Error('Não foi possível obter informações do vídeo');
             const data = await res.json();
-            
-            // Preencher os elementos de preview
-            document.getElementById('preview-thumb').src = data.thumbnail;
-            document.getElementById('preview-title').textContent = data.title;
-            document.getElementById('preview-uploader').textContent = data.uploader;
-            document.getElementById('preview-duration').textContent = formatDuration(data.duration);
-            
-            // Mostrar o preview
+            if (data.erro) throw new Error(data.erro);
+            thumb.src = data.thumbnail || '';
+            title.textContent = data.title || '';
+            uploader.textContent = data.uploader ? `Canal: ${data.uploader}` : '';
+            duration.textContent = data.duration ? formatDuration(data.duration) : '';
             preview.classList.remove('hidden');
         } catch (e) {
-            console.error('Erro ao carregar preview:', e);
             preview.classList.add('hidden');
         }
     });
-    
+
     // Função para formatar a duração do vídeo
     function formatDuration(seconds) {
         if (!seconds) return '';
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
         const secs = Math.floor(seconds % 60);
-        
         let result = '';
         if (hrs > 0) result += `${hrs}:`;
         result += `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
@@ -95,20 +90,35 @@
         this.disabled = true;
         status.textContent = 'Processando, aguarde...';
         try {
-            const res = await fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/baixar', {
+            const res = await fetch(BACKEND + '/baixar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url, formato })
             });
             if (!res.ok) {
-                const erro = await res.json();
-                throw new Error(erro.erro || 'Erro ao baixar');
+                let erroMsg = '';
+                try {
+                    const erro = await res.json();
+                    erroMsg = erro.erro || 'Erro ao baixar';
+                } catch {
+                    erroMsg = await res.text();
+                    if (erroMsg.startsWith('<!DOCTYPE')) {
+                        erroMsg = 'Erro inesperado do servidor (HTML recebido).';
+                    }
+                }
+                throw new Error(erroMsg);
+            }
+            // Pega nome sugerido do header
+            let filename = 'youtube-download.' + (formato === 'mp3' ? 'mp3' : 'mp4');
+            const disp = res.headers.get('Content-Disposition');
+            if (disp) {
+                const match = disp.match(/filename="?([^"]+)"?/);
+                if (match) filename = match[1];
             }
             const blob = await res.blob();
-            const ext = formato === 'mp3' ? 'mp3' : 'mp4';
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `youtube-download.${ext}`;
+            a.download = filename;
             a.click();
             status.textContent = 'Download iniciado!';
         } catch (e) {
