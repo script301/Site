@@ -11,6 +11,16 @@
         <h1 class="text-2xl font-bold text-white mb-4">YouTube Downloader</h1>
         <label class="block text-gray-300 mb-2">Link do vídeo ou playlist</label>
         <input type="text" id="youtube-url" class="w-full p-2 rounded bg-gray-800 text-white mb-4" placeholder="https://youtube.com/..." required>
+        <div id="preview" class="mb-4 hidden">
+            <div class="flex items-center gap-3">
+                <img id="preview-thumb" src="" alt="Thumbnail" class="w-20 h-20 rounded shadow border border-gray-700 object-cover">
+                <div>
+                    <div id="preview-title" class="text-white font-semibold"></div>
+                    <div id="preview-uploader" class="text-gray-400 text-sm"></div>
+                    <div id="preview-duration" class="text-gray-400 text-xs"></div>
+                </div>
+            </div>
+        </div>
         <label class="block text-gray-300 mb-2">Formato</label>
         <select id="formato" class="w-full p-2 rounded bg-gray-800 text-white mb-4">
             <option value="mp4">Vídeo (.mp4)</option>
@@ -20,52 +30,92 @@
         <p id="status" class="text-gray-300 mt-4"></p>
     </div>
     <script>
-// Ping para acordar o backend do Replit
-fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/', { method: 'GET' }).catch(()=>{});
+    // Ping para acordar o backend do Replit
+    fetch('https://SEU-REPLIT-URL.repl.co/', { method: 'GET' }).catch(()=>{});
 
-document.getElementById('baixar-btn').onclick = async function() {
-    const url = document.getElementById('youtube-url').value.trim();
-    const formato = document.getElementById('formato').value;
-    const status = document.getElementById('status');
-    if (!url) {
-        status.textContent = 'Informe o link do vídeo!';
-        return;
-    }
-    this.disabled = true;
-    status.textContent = 'Processando, aguarde...';
-    try {
-        const res = await fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/baixar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url, formato })
-        });
-
-        if (!res.ok) {
-            let erroMsg = '';
-            try {
-                const erro = await res.json();
-                erroMsg = erro.erro || 'Erro ao baixar';
-            } catch {
-                erroMsg = await res.text();
-                if (erroMsg.startsWith('<!DOCTYPE')) {
-                    erroMsg = 'Erro inesperado do servidor (HTML recebido).';
-                }
-            }
-            throw new Error(erroMsg);
+    // Função para obter informações do vídeo e mostrar preview
+    document.getElementById('youtube-url').addEventListener('blur', async function() {
+        const url = this.value.trim();
+        const preview = document.getElementById('preview');
+        
+        if (!url) {
+            preview.classList.add('hidden');
+            return;
         }
-
-        const blob = await res.blob();
-        const ext = formato === 'mp3' ? 'mp3' : 'mp4';
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `youtube-download.${ext}`;
-        a.click();
-        status.textContent = 'Download iniciado!';
-    } catch (e) {
-        status.textContent = 'Erro: ' + e.message;
+        
+        try {
+            // Aqui você faria uma chamada para o backend para obter os metadados do vídeo
+            const res = await fetch('https://SEU-REPLIT-URL.repl.co/info', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            });
+            
+            if (!res.ok) {
+                throw new Error('Não foi possível obter informações do vídeo');
+            }
+            
+            const data = await res.json();
+            
+            // Preencher os elementos de preview
+            document.getElementById('preview-thumb').src = data.thumbnail;
+            document.getElementById('preview-title').textContent = data.title;
+            document.getElementById('preview-uploader').textContent = data.uploader;
+            document.getElementById('preview-duration').textContent = formatDuration(data.duration);
+            
+            // Mostrar o preview
+            preview.classList.remove('hidden');
+        } catch (e) {
+            console.error('Erro ao carregar preview:', e);
+            preview.classList.add('hidden');
+        }
+    });
+    
+    // Função para formatar a duração do vídeo
+    function formatDuration(seconds) {
+        if (!seconds) return '';
+        const hrs = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+        
+        let result = '';
+        if (hrs > 0) result += `${hrs}:`;
+        result += `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        return result;
     }
-    this.disabled = false;
-};
+
+    document.getElementById('baixar-btn').onclick = async function() {
+        const url = document.getElementById('youtube-url').value.trim();
+        const formato = document.getElementById('formato').value;
+        const status = document.getElementById('status');
+        if (!url) {
+            status.textContent = 'Informe o link do vídeo!';
+            return;
+        }
+        this.disabled = true;
+        status.textContent = 'Processando, aguarde...';
+        try {
+            const res = await fetch('https://replit.com/@BRUNOMOURA13/youtube-downloader', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url, formato })
+            });
+            if (!res.ok) {
+                const erro = await res.json();
+                throw new Error(erro.erro || 'Erro ao baixar');
+            }
+            const blob = await res.blob();
+            const ext = formato === 'mp3' ? 'mp3' : 'mp4';
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `youtube-download.${ext}`;
+            a.click();
+            status.textContent = 'Download iniciado!';
+        } catch (e) {
+            status.textContent = 'Erro: ' + e.message;
+        }
+        this.disabled = false;
+    };
     </script>
 </body>
 </html>
