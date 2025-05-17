@@ -33,7 +33,10 @@
     <script>
     // ENDEREÇO DO SEU BACKEND
     const BACKEND = 'https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev';
-
+        fetch(BACKEND + '/', { method: 'GET' }).catch(()=>{});
+        const status = document.getElementById('status');
+        status.textContent = 'Aguardando servidor acordar... (isso pode levar alguns segundos)';
+        
     // Função para formatar duração
     function formatDuration(seconds) {
         if (!seconds) return '';
