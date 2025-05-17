@@ -20,41 +20,52 @@
         <p id="status" class="text-gray-300 mt-4"></p>
     </div>
     <script>
-    // Ping para acordar o backend do Replit
-    fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/', { method: 'GET' }).catch(()=>{});
+// Ping para acordar o backend do Replit
+fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/', { method: 'GET' }).catch(()=>{});
 
-    document.getElementById('baixar-btn').onclick = async function() {
-        const url = document.getElementById('youtube-url').value.trim();
-        const formato = document.getElementById('formato').value;
-        const status = document.getElementById('status');
-        if (!url) {
-            status.textContent = 'Informe o link do vídeo!';
-            return;
-        }
-        this.disabled = true;
-        status.textContent = 'Processando, aguarde...';
-        try {
-            const res = await fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/baixar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url, formato })
-            });
-            if (!res.ok) {
+document.getElementById('baixar-btn').onclick = async function() {
+    const url = document.getElementById('youtube-url').value.trim();
+    const formato = document.getElementById('formato').value;
+    const status = document.getElementById('status');
+    if (!url) {
+        status.textContent = 'Informe o link do vídeo!';
+        return;
+    }
+    this.disabled = true;
+    status.textContent = 'Processando, aguarde...';
+    try {
+        const res = await fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/baixar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url, formato })
+        });
+
+        if (!res.ok) {
+            let erroMsg = '';
+            try {
                 const erro = await res.json();
-                throw new Error(erro.erro || 'Erro ao baixar');
+                erroMsg = erro.erro || 'Erro ao baixar';
+            } catch {
+                erroMsg = await res.text();
+                if (erroMsg.startsWith('<!DOCTYPE')) {
+                    erroMsg = 'Erro inesperado do servidor (HTML recebido).';
+                }
             }
-            const blob = await res.blob();
-            const ext = formato === 'mp3' ? 'mp3' : 'mp4';
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `youtube-download.${ext}`;
-            a.click();
-            status.textContent = 'Download iniciado!';
-        } catch (e) {
-            status.textContent = 'Erro: ' + e.message;
+            throw new Error(erroMsg);
         }
-        this.disabled = false;
-    };
+
+        const blob = await res.blob();
+        const ext = formato === 'mp3' ? 'mp3' : 'mp4';
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `youtube-download.${ext}`;
+        a.click();
+        status.textContent = 'Download iniciado!';
+    } catch (e) {
+        status.textContent = 'Erro: ' + e.message;
+    }
+    this.disabled = false;
+};
     </script>
 </body>
 </html>
