@@ -31,7 +31,7 @@
     </div>
     <script>
     // Ping para acordar o backend do Replit
-    fetch('https://SEU-REPLIT-URL.repl.co/', { method: 'GET' }).catch(()=>{});
+    fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/', { method: 'GET' }).catch(()=>{});
 
     // Função para obter informações do vídeo e mostrar preview
     document.getElementById('youtube-url').addEventListener('blur', async function() {
@@ -45,7 +45,7 @@
         
         try {
             // Aqui você faria uma chamada para o backend para obter os metadados do vídeo
-            const res = await fetch('https://SEU-REPLIT-URL.repl.co/info', {
+            const res = await fetch('hhttps://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url })
@@ -95,7 +95,7 @@
         this.disabled = true;
         status.textContent = 'Processando, aguarde...';
         try {
-            const res = await fetch('https://replit.com/@BRUNOMOURA13/youtube-downloader', {
+            const res = await fetch('https://1392d607-caf5-40f3-88e1-3ea812c6273b-00-g113hf7pwva5.worf.replit.dev/baixar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url, formato })
