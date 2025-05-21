@@ -94,10 +94,21 @@ baixarBtn.onclick = async function() {
             throw new Error(erroMsg);
         }
         const blob = await res.blob();
-        const ext = formato === 'mp3' ? 'mp3' : 'mp4';
+        
+        // Pega o nome do arquivo do header Content-Disposition
+        let filename = "youtube-download";
+        const disposition = res.headers.get('Content-Disposition');
+        if (disposition && disposition.includes('filename=')) {
+            filename = disposition.split('filename=')[1].replace(/["']/g, "");
+        } else {
+            // fallback
+            const ext = formato === 'mp3' ? 'mp3' : 'mp4';
+            filename = `youtube-download.${ext}`;
+        }
+        
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `youtube-download.${ext}`;
+        a.download = filename;
         a.click();
         status.textContent = 'Download iniciado!';
     } catch (e) {
